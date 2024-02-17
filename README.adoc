@@ -443,6 +443,16 @@ Wrote auth info to /home/pi-camera/.config/immich/auth.yml
 Make sure that the line for the appropriate installation method is uncommented and either comment or remove the line for the alternative method.
 Additionally, the `Requires` and `After` should be updated appropriately for the node where the Immich server resides.
 +
+User::
++
+./etc/systemd/system/autoupload-immich@.service
+[,systemd]
+----
+include::systemd/system/autoupload-immich@.service[]
+----
+
+User::
++
 ./etc/systemd/user/autoupload-immich@.service
 [,systemd]
 ----
@@ -451,6 +461,15 @@ include::systemd/user/autoupload-immich@.service[]
 
 . Enable and start the instantiable `autoupload-immich@.path` systemd unit passing the properly escaped path of the directory to monitor.
 Use the `systemd-escape --path` command to escape the directory's path.
++
+System::
++
+[,sh]
+----
+sudo systemctl enable --now autoupload-immich@$(systemd-escape --path ~/Pictures).path
+----
+
+User::
 +
 [,sh]
 ----
@@ -534,6 +553,16 @@ chmod 0600 ~/.config/rclone/rclone.conf
 . Modify the `autoupload-rclone@.service` file as needed.
 Additionally, the `Requires` and `After` should be updated appropriately for the node where the MinIO server resides.
 +
+System::
++
+./etc/systemd/system/autoupload-rclone@.service
+[,systemd]
+----
+include::systemd/system/autoupload-rclone@.service[]
+----
+
+User::
++
 ./etc/systemd/user/autoupload-rclone@.service
 [,systemd]
 ----
@@ -542,6 +571,15 @@ include::systemd/user/autoupload-rclone@.service[]
 
 . Enable and start the instantiable `autoupload-rclone@.path` systemd unit passing the properly escaped path of the directory to monitor.
 Use the `systemd-escape --path` command to escape the directory's path.
++
+System::
++
+[,sh]
+----
+sudo systemctl enable --now autoupload-rclone@$(systemd-escape --path /root/pictures).path
+----
+
+User::
 +
 [,sh]
 ----
