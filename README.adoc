@@ -310,6 +310,15 @@ These instructions also document how to install Tailscale itself.
 After installing the necessary files, the following command enables the Tailscale Online Target for the `meerkat` node where my files will be uploaded.
 The Tailscale Online Target for this specific instance is added as a dependency for the autoupload systemd service.
 +
+System::
++
+[,sh]
+----
+sudo systemctl enable --now tailscale-dispatcher@meerkat.timer
+----
+
+User::
++
 [,sh]
 ----
 systemctl --user enable --now tailscale-dispatcher@meerkat.timer
