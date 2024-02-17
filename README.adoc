@@ -466,7 +466,7 @@ System::
 +
 [,sh]
 ----
-sudo systemctl enable --now autoupload-immich@$(systemd-escape --path ~/Pictures).path
+sudo systemctl enable --now autoupload-immich@$(systemd-escape --path /root/Pictures).path
 ----
 
 User::
