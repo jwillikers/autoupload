@@ -1,0 +1,15 @@
+[Unit]
+Description=Automatically upload the contents of the directory %f
+Requires=tailscale-online@meerkat.target
+After=tailscale-online@meerkat.target
+StartLimitIntervalSec=2min
+
+[Service]
+# asdf
+ExecStart=%h/.asdf/shims/immich upload --delete --recursive %f
+
+# Native
+# ExecStart=/usr/loca/bin/immich upload --delete --recursive %f
+
+[Install]
+WantedBy=default.target
