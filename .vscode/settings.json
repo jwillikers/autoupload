@@ -11,6 +11,7 @@
         "jwillikers",
         "keyrings",
         "Minio",
+        "noarmor",
         "Nushell",
         "ostree",
         "picamera",
