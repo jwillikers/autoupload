@@ -424,7 +424,7 @@ sudo systemctl reboot
 +
 [,sh]
 ----
-npm i -g @immich/cli
+npm install --global @immich/cli
 ----
 
 . Set up the API key for authenticating with the Immich instance.
@@ -443,10 +443,10 @@ Wrote auth info to /home/pi-camera/.config/immich/auth.yml
 Make sure that the line for the appropriate installation method is uncommented and either comment or remove the line for the alternative method.
 Additionally, the `Requires` and `After` should be updated appropriately for the node where the Immich server resides.
 +
-./etc/systemd/system/autoupload-immich@.service
+./etc/systemd/user/autoupload-immich@.service
 [,systemd]
 ----
-include::systemd/system/autoupload-immich@.service[]
+include::systemd/user/autoupload-immich@.service[]
 ----
 
 . Enable and start the instantiable `autoupload-immich@.path` systemd unit passing the properly escaped path of the directory to monitor.
@@ -454,7 +454,7 @@ Use the `systemd-escape --path` command to escape the directory's path.
 +
 [,sh]
 ----
-systemctl --user enable --now autoupload-immich@$(systemd-escape --path /home/pi-camera/Pictures).path
+systemctl --user enable --now autoupload-immich@$(systemd-escape --path ~/Pictures).path
 ----
 
 === Rclone
@@ -534,10 +534,10 @@ chmod 0600 ~/.config/rclone/rclone.conf
 . Modify the `autoupload-rclone@.service` file as needed.
 Additionally, the `Requires` and `After` should be updated appropriately for the node where the MinIO server resides.
 +
-./etc/systemd/system/autoupload-rclone@.service
+./etc/systemd/user/autoupload-rclone@.service
 [,systemd]
 ----
-include::systemd/system/autoupload-rclone@.service[]
+include::systemd/user/autoupload-rclone@.service[]
 ----
 
 . Enable and start the instantiable `autoupload-rclone@.path` systemd unit passing the properly escaped path of the directory to monitor.
@@ -545,7 +545,7 @@ Use the `systemd-escape --path` command to escape the directory's path.
 +
 [,sh]
 ----
-systemctl --user enable --now autoupload-rclone@$(systemd-escape --path /home/pi-camera/Pictures).path
+systemctl --user enable --now autoupload-rclone@$(systemd-escape --path ~/Pictures).path
 ----
 
 == Code of Conduct
