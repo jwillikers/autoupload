@@ -321,11 +321,18 @@ The instructions here install and enable Tailscale and the {Tailscale-Online-Tar
 +
 Debian::
 +
+.. Install the `lsb-release` utility.
++
+[,sh]
+----
+sudo apt-get --yes install lsb-release
+----
+
 .. Add the Tailscale signing key to the system keyring.
 +
 [,sh]
 ----
-curl --fail --location --show-error --silent https://pkgs.tailscale.com/stable/debian/bookworm.noarmor.gpg \
+curl --fail --location --show-error --silent https://pkgs.tailscale.com/stable/debian/$(lsb_release --codename --short).noarmor.gpg \
   | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg > /dev/null
 ----
 
@@ -333,7 +340,7 @@ curl --fail --location --show-error --silent https://pkgs.tailscale.com/stable/d
 +
 [,sh]
 ----
-curl --fail --location --show-error --silent https://pkgs.tailscale.com/stable/debian/bookworm.tailscale-keyring.list \
+curl --fail --location --show-error --silent https://pkgs.tailscale.com/stable/debian/$(lsb_release --codename --short).tailscale-keyring.list \
   | sudo tee /etc/apt/sources.list.d/tailscale.list
 ----
 
@@ -410,6 +417,7 @@ Debian::
 ====
 The version of NodeJS shipped in Debian Bookworm is too old for Immich CLI.
 {asdf} makes it possible to easily install a newer version of NodeJS.
+Install asdf under the user that will be running the systemd unit to upload files.
 ====
 +
 .. Clone the repository for {asdf}.
