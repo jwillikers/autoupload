@@ -277,6 +277,25 @@ Don't lose it or you'll have to generate another one.
 These instructions install the autoupload systemd units and their dependencies.
 The instructions here are for both Debian and Fedora Atomic.
 
+. Follow the instructions to setup the {Tailscale-Online-Target} for the node where files will be uploaded.
+These instructions also document how to install Tailscale itself.
+After installing the necessary files, the following command enables the Tailscale Online Target for the `meerkat` node where my files will be uploaded.
+The Tailscale Online Target for this specific instance is added as a dependency for the autoupload systemd service.
++
+System::
++
+[,sh]
+----
+sudo systemctl enable --now tailscale-dispatcher@meerkat.timer
+----
+
+User::
++
+[,sh]
+----
+systemctl --user enable --now tailscale-dispatcher@meerkat.timer
+----
+
 . Clone this project's repository.
 +
 [,sh]
@@ -303,25 +322,6 @@ sudo cp systemd/user/* /etc/systemd/user/
 [,sh]
 ----
 sudo cp systemd/system/* /etc/systemd/system/
-----
-
-. Follow the instructions to setup the {Tailscale-Online-Target} for the node where files will be uploaded.
-These instructions also document how to install Tailscale itself.
-After installing the necessary files, the following command enables the Tailscale Online Target for the `meerkat` node where my files will be uploaded.
-The Tailscale Online Target for this specific instance is added as a dependency for the autoupload systemd service.
-+
-System::
-+
-[,sh]
-----
-sudo systemctl enable --now tailscale-dispatcher@meerkat.timer
-----
-
-User::
-+
-[,sh]
-----
-systemctl --user enable --now tailscale-dispatcher@meerkat.timer
 ----
 
 === Immich CLI
