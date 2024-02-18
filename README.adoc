@@ -445,7 +445,7 @@ Wrote auth info to /home/pi-camera/.config/immich/auth.yml
 Make sure that the line for the appropriate installation method is uncommented and either comment or remove the line for the alternative method.
 Additionally, the `Requires` and `After` should be updated appropriately for the node where the Immich server resides.
 +
-User::
+System::
 +
 ./etc/systemd/system/autoupload-immich@.service
 [,systemd]
