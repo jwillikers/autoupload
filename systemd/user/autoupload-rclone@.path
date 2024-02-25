@@ -1,9 +1,8 @@
 [Unit]
 Description=Watch the %f directory for changes
-StartLimitIntervalSec=2min
 
 [Path]
-DirectoryNotEmpty=%f
+PathChanged=%f
 MakeDirectory=true
 TriggerLimitBurst=0
 TriggerLimitIntervalSec=2min

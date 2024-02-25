@@ -1,8 +1,8 @@
 [Unit]
 Description=Automatically upload the contents of the directory %f
-Requires=tailscale-online@meerkat.target
 After=tailscale-online@meerkat.target
-StartLimitIntervalSec=2min
+BindsTo=tailscale-online@meerkat.target
+# ExecCondition=/bin/bash -xc '/usr/bin/systemctl is-active --quiet "%n" && exit 255 || exit 1; } || exit 0'
 
 [Service]
 # asdf
@@ -11,6 +11,3 @@ ExecStart=/root/.asdf/shims/immich upload --delete --recursive %f
 
 # Native
 # ExecStart=/usr/loca/bin/immich upload --delete --recursive %f
-
-[Install]
-WantedBy=multi-user.target
