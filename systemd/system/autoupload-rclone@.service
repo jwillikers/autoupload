@@ -2,6 +2,7 @@
 Description=Automatically upload the contents of the directory %f
 After=tailscale-online@meerkat.target
 BindsTo=tailscale-online@meerkat.target
+StartLimitIntervalSec=0
 
 [Service]
 ExecStart=/usr/bin/rclone move %f minio:pi-camera

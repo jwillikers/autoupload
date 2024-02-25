@@ -1,11 +1,13 @@
 [Unit]
 Description=Watch the %f directory for changes
+After=tailscale-online@meerkat.target
+BindsTo=tailscale-online@meerkat.target
+StartLimitIntervalSec=0
 
 [Path]
 PathChanged=%f
 MakeDirectory=true
-TriggerLimitBurst=0
-TriggerLimitIntervalSec=2min
+TriggerLimitIntervalSec=0
 
 [Install]
 WantedBy=default.target

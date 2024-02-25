@@ -2,6 +2,7 @@
 Description=Automatically upload the contents of the directory %f
 After=tailscale-online@meerkat.target
 BindsTo=tailscale-online@meerkat.target
+StartLimitIntervalSec=0
 # ExecCondition=/bin/bash -xc '/usr/bin/systemctl is-active --quiet "%n" && exit 255 || exit 1; } || exit 0'
 
 [Service]

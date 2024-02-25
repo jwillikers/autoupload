@@ -2,6 +2,7 @@
 Description=Automatically upload the contents of the directory %f
 BindsTo=tailscale-online@meerkat.target
 After=tailscale-online@meerkat.target
+StartLimitIntervalSec=0
 
 [Service]
 # asdf
