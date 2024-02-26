@@ -45,3 +45,12 @@ install-rclone:
 install:
     sudo cp systemd/user/* /etc/systemd/user/
     sudo cp systemd/system/* /etc/systemd/system/
+
+login server api_key:
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    if [ "$distro" = "debian" ]; then
+        "{{ home_directory() }}/.asdf/shims/immich" login-key "{{ server }}" "{{ api_key }}"
+    elif [ "$distro" = "fedora" ]; then
+        immich login-key https://immich.jwillikers.io/api "{{ api_key }}"
+    fi

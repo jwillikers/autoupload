@@ -324,21 +324,35 @@ just install
 
 . Install {Immich-CLI} by running `just install-immich-cli`.
 +
+System::
++
+[,sh]
+----
+sudo just install-immich-cli
+----
+
+User::
++
 [,sh]
 ----
 just install-immich-cli
 ----
 
 . Set up the API key for authenticating with the Immich instance.
+This can be done with the `just login` command which will run the `immich login-key` command.
 The last argument should be the API key generated for the Pi Camera user in the <<Immich>> section.
 Run this command under the same user that will be running the systemd unit.
 +
 [,sh]
 ----
-immich login-key https://immich.jwillikers.io/api the-api-key
-Executing API key auth flow...
-Logged in as pi-camera@jwillikers.com
-Wrote auth info to /home/pi-camera/.config/immich/auth.yml
+sudo just login immich https://immich.jwillikers.io/api the-api-key
+----
+
+User::
++
+[,sh]
+----
+just login immich https://immich.jwillikers.io/api the-api-key
 ----
 
 . Modify the `autoupload-immich@.service` file as needed.
