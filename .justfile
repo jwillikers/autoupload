@@ -11,7 +11,7 @@ install-immich-cli immich_cli_version="2.0.7" nodejs_version="20.11.1":
     set -euxo pipefail
     distro=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
     if [ "$distro" = "debian" ]; then
-        git clone https://github.com/asdf-vm/asdf.git {{ home_directory() }}/.asdf --branch {{ immich_cli_version }}
+        if [ -d {{ home_directory() }}/.asdf ] || git clone https://github.com/asdf-vm/asdf.git {{ home_directory() }}/.asdf --branch {{ immich_cli_version }}
         sudo apt-get --yes install dirmngr gpg curl gawk
         . "{{ home_directory() }}/.asdf/asdf.sh" && asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
         . "{{ home_directory() }}/.asdf/asdf.sh" && asdf install nodejs {{ nodejs_version }}
