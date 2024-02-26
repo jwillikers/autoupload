@@ -9,4 +9,4 @@ StartLimitIntervalSec=0
 ExecStart=%h/.asdf/shims/immich upload --delete --recursive %f
 
 # Native
-# ExecStart=/usr/loca/bin/immich upload --delete --recursive %f
+# ExecStart=/usr/local/bin/immich upload --delete --recursive %f
