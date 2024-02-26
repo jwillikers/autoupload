@@ -15,6 +15,7 @@ endif::[]
 :asdf-version-tag: v0.14.0
 :Immich: https://immich.app/[Immich]
 :Immich-CLI: https://immich.app/docs/features/command-line-interface/[Immich CLI]
+:just: https://github.com/casey/just[just]
 :MinIO: https://min.io/[MinIO]
 :nodejs-version: 20.11.0
 :podman: https://podman.io/[podman]
@@ -277,6 +278,8 @@ Don't lose it or you'll have to generate another one.
 These instructions install the autoupload systemd units and their dependencies.
 The instructions here are for both Debian and Fedora Atomic.
 
+. Install {just} by following the instructions in the https://github.com/casey/just?tab=readme-ov-file#installation[installation section].
+
 . Follow the instructions to setup the {Tailscale-Online-Target} for the node where files will be uploaded.
 These instructions also document how to install Tailscale itself.
 After installing the necessary files, the following command enables the Tailscale Online Target for the `meerkat` node where my files will be uploaded.
@@ -310,123 +313,20 @@ git clone https://github.com/jwillikers/autoupload.git
 cd autoupload
 ----
 
-. Copy the systemd user units to the `/etc/systemd/user/` directory.
+. Install everything with `just install`.
 +
 [,sh]
 ----
-sudo cp systemd/user/* /etc/systemd/user/
-----
-
-. Copy the systemd system units to the `/etc/systemd/system/` directory.
-+
-[,sh]
-----
-sudo cp systemd/system/* /etc/systemd/system/
+just install
 ----
 
 === Immich CLI
 
-. Install {Immich-CLI}.
-+
-Debian::
-+
-[NOTE]
-====
-The version of NodeJS shipped in Debian Bookworm is too old for Immich CLI.
-{asdf} makes it possible to easily install a newer version of NodeJS.
-Install asdf under the user that will be running the systemd unit to upload files.
-====
-+
-.. Clone the repository for {asdf}.
-+
-[,sh,subs="attributes+"]
-----
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch {asdf-version-tag}
-----
-
-.. Install asdf in your shell.
-https://asdf-vm.com/guide/getting-started.html#_3-install-asdf[installation documentation] contains a nice list for a lot of different shells.
-I'll cover Bash because I have to here, but I'll also include the instructions for my favorite shells.
-+
-Bash::: Load the `asdf.sh` script in `~/.profile`.
-+
-.~/.profile
-[,sh]
-----
-. "$HOME/.asdf/asdf.sh"
-----
-
-fish::: Load the `asdf.fish` script in the fish shell's configuration.
-+
-.~/.config/fish/conf.d/asdf.fish
-[,sh]
-----
-source ~/.asdf/asdf.fish
-----
-
-Nushell::: Load the `asdf.nu` script in `~/.config/nushell/config.nu` by running the following command.
-+
-[,nushell]
-----
-"\n$env.ASDF_DIR = ($env.HOME | path join '.asdf')\n source " + ($env.HOME | path join '.asdf/asdf.nu') | save --append $nu.config-path
-----
-
-.. Now, load the updated configuration for your shell.
-For fish and Nushell, just open a new shell to accomplish this.
-The Bash configuration uses `~/.profile`, which is only loaded when logging in, so log out and back in to load that or run `source ~/.profile` to load it in the current shell.
-
-.. Install the necessary packages for the NodeJS plugin for asdf, {asdf-nodejs}.
+. Install {Immich-CLI} by running `just install-immich-cli`.
 +
 [,sh]
 ----
-sudo apt-get --yes install dirmngr gpg curl gawk
-----
-
-.. Add the NodeJS plugin to asdf.
-+
-[,sh]
-----
-asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-----
-
-.. Install NodeJS.
-Immich CLI currently requires at least version 20 of NodeJS.
-At the time of writing, this is the latest LTS, so I'm grabbing the latest minor version of NodeJS available.
-+
-[,sh,subs="attributes+"]
-----
-asdf install nodejs {nodejs-version}
-----
-
-.. Set this version of NodeJS current version globally.
-To be clear, that's globally for your user.
-+
-[,sh,subs="attributes+"]
-----
-asdf global nodejs {nodejs-version}
-----
-
-Fedora::
-+
-.. Install the nodejs package.
-+
-[,sh]
-----
-sudo rpm-ostree install nodejs
-----
-
-.. Reboot.
-+
-[,sh]
-----
-sudo systemctl reboot
-----
-
-. Now install the Immich CLI.
-+
-[,sh]
-----
-npm install --global @immich/cli
+just install-immich-cli
 ----
 
 . Set up the API key for authenticating with the Immich instance.
@@ -480,29 +380,11 @@ systemctl --user enable --now autoupload-immich@$(systemd-escape --path ~/Pictur
 
 === Rclone
 
-. Install Rclone.
-+
-Debian:::
+. Install Rclone with `just install-rclone`.
 +
 [,sh]
 ----
-sudo apt-get --yes install rclone
-----
-
-Fedora:::
-+
-.. Install the Rclone package
-+
-[,sh]
-----
-sudo rpm-ostree install rclone
-----
-
-.. Reboot.
-+
-[,sh]
-----
-sudo systemctl reboot
+just install-rclone
 ----
 
 . Create the Rclone configuration directory which is `/etc/rclone/` for the system and `~/.config/rclone` for a user.
