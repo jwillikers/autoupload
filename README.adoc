@@ -345,14 +345,14 @@ Run this command under the same user that will be running the systemd unit.
 +
 [,sh]
 ----
-sudo just login immich https://immich.jwillikers.io/api the-api-key
+sudo just login https://immich.jwillikers.io/api the-api-key
 ----
 
 User::
 +
 [,sh]
 ----
-just login immich https://immich.jwillikers.io/api the-api-key
+just login https://immich.jwillikers.io/api the-api-key
 ----
 
 . Modify the `autoupload-immich@.service` file as needed.
