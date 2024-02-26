@@ -6,7 +6,7 @@ alias fmt := format
 format:
     just --fmt --unstable
 
-install-immich-cli immich_cli_version="v0.14.0" nodejs_version=20.11.0:
+install-immich-cli immich_cli_version="v0.14.0" nodejs_version="20.11.0":
     #!/usr/bin/env bash
     set -euxo pipefail
     distro=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
