@@ -12,12 +12,10 @@ ifdef::env-github[]
 endif::[]
 :asdf: https://asdf-vm.com[asdf]
 :asdf-nodejs: https://github.com/asdf-vm/asdf-nodejs[asdf-nodejs]
-:asdf-version-tag: v0.14.0
 :Immich: https://immich.app/[Immich]
 :Immich-CLI: https://immich.app/docs/features/command-line-interface/[Immich CLI]
 :just: https://github.com/casey/just[just]
 :MinIO: https://min.io/[MinIO]
-:nodejs-version: 20.11.0
 :podman: https://podman.io/[podman]
 :Rclone: https://rclone.org/[Rclone]
 :systemd: https://systemd.io/[systemd]

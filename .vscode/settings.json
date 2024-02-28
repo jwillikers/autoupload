@@ -8,6 +8,7 @@
         "ifndef",
         "Immich",
         "inplace",
+        "justfile",
         "jwillikers",
         "keyrings",
         "Minio",

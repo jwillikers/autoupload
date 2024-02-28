@@ -12,3 +12,15 @@ repos:
       - id: pretty-format-json
         exclude: ^.vscode/.*\.json$
       - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: just
+        entry: just --fmt --unstable
+        files: |
+          (?x)^(
+            .justfile|
+            justfile
+          )$
+        language: system
+        name: just
+        pass_filenames: false
