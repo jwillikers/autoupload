@@ -48,11 +48,11 @@ install:
     sudo cp systemd/system/* /etc/systemd/system/
     sudo systemctl daemon-reload
 
-login server api_key:
+login api_key server="https://immich.jwillikers.io/api":
     #!/usr/bin/env bash
     set -euxo pipefail
     if [ "$distro" = "debian" ]; then
         "{{ home_directory() }}/.asdf/shims/immich" login-key "{{ server }}" "{{ api_key }}"
     elif [ "$distro" = "fedora" ]; then
-        immich login-key https://immich.jwillikers.io/api "{{ api_key }}"
+        immich login-key "{{ server }}" "{{ api_key }}"
     fi
