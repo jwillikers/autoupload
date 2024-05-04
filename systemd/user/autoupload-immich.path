@@ -1,14 +1,15 @@
 [Unit]
-Description=Watch the %f directory for changes
+Description=Watch the directory for changes
 After=tailscale-online@meerkat.target
 BindsTo=tailscale-online@meerkat.target
 StartLimitIntervalSec=0
 
 [Path]
-PathChanged=%f
+# todo Make this an instantiable unit when only versions five and newer of Podman are supported.
+# PathChanged=%f
+PathChanged=/home/jordan/Pictures
 MakeDirectory=true
 TriggerLimitIntervalSec=0
-Unit=autoupload-immich.container
 
 [Install]
 WantedBy=default.target
