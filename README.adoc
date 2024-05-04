@@ -10,8 +10,6 @@ ifdef::env-github[]
 :caution-caption: :fire:
 :warning-caption: :warning:
 endif::[]
-:asdf: https://asdf-vm.com[asdf]
-:asdf-nodejs: https://github.com/asdf-vm/asdf-nodejs[asdf-nodejs]
 :Immich: https://immich.app/[Immich]
 :Immich-CLI: https://immich.app/docs/features/command-line-interface/[Immich CLI]
 :just: https://github.com/casey/just[just]
@@ -343,34 +341,24 @@ Run this command under the same user that will be running the systemd unit.
 +
 [,sh]
 ----
-sudo just login https://immich.jwillikers.io/api the-api-key
+ printf "%s" '<the API key>' | sudo podman secret create immich_api_key 
 ----
 
 User::
 +
 [,sh]
 ----
-just login https://immich.jwillikers.io/api the-api-key
+ printf "%s" '<the API key>' | podman secret create immich_api_key 
 ----
 
-. Modify the `autoupload-immich@.service` file as needed.
+. Modify the `autoupload-immich@.container` file as needed.
 Make sure that the line for the appropriate installation method is uncommented and either comment or remove the line for the alternative method.
 Additionally, the `Requires` and `After` should be updated appropriately for the node where the Immich server resides.
 +
-System::
-+
-./etc/systemd/system/autoupload-immich@.service
+./etc/systemd/system/autoupload-immich@.container
 [,systemd]
 ----
-include::systemd/system/autoupload-immich@.service[]
-----
-
-User::
-+
-./etc/systemd/user/autoupload-immich@.service
-[,systemd]
-----
-include::systemd/user/autoupload-immich@.service[]
+include::immich-cli/autoupload-immich@.container[]
 ----
 
 . Enable and start the instantiable `autoupload-immich@.path` systemd unit passing the properly escaped path of the directory to monitor.

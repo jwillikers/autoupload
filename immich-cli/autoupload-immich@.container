@@ -1,0 +1,22 @@
+[Unit]
+Description=Immich CLI autoupload container
+After=tailscale-online@meerkat.target
+BindsTo=tailscale-online@meerkat.target
+StartLimitIntervalSec=0
+
+[Container]
+AutoUpdate=registry
+ContainerName=immich-cli
+Environment=IMMICH_INSTANCE_URL=https://immich.jwillikers.io/api
+Exec=immich upload --delete --recursive /import
+Image=ghcr.io/immich-app/immich-cli:latest
+Network=podman.network
+Pull=newer
+Secret=immich_api_key,type=env,target=IMMICH_API_KEY
+UserNS=keep-id
+Volume=%f:/import:z
+
+[Service]
+Restart=always
+TimeoutStartSec=15min
+TimeoutStopSec=15min
