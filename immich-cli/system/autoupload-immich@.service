@@ -1,0 +1,41 @@
+[Unit]
+Description=Immich CLI autoupload container
+Documentation=man:podman-generate-systemd(1)
+After=tailscale-online@meerkat.target
+BindsTo=tailscale-online@meerkat.target
+RequiresMountsFor=%t/containers
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+Restart=on-failure
+TimeoutStopSec=70
+ExecStart=/usr/bin/podman run \
+	--cidfile=%t/%n.ctr-id \
+	--cgroups=no-conmon \
+	--rm \
+	--sdnotify=conmon \
+	--replace \
+	--detach \
+	--env IMMICH_INSTANCE_URL=https://immich.jwillikers.io/api \
+	--label io.containers.autoupdate=registry \
+	--name immich-cli \
+	--network podman \
+    --secret immich_api_key,type=env,target=IMMICH_API_KEY \
+	--volume %f:/import:z \
+    ghcr.io/immich-app/immich-cli:latest \
+        upload \
+        --delete \
+        --recursive \
+        /import
+ExecStop=/usr/bin/podman stop \
+	--ignore -t 10 \
+	--cidfile=%t/%n.ctr-id
+ExecStopPost=/usr/bin/podman rm \
+	-f \
+	--ignore -t 10 \
+	--cidfile=%t/%n.ctr-id
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=default.target

@@ -5,11 +5,9 @@ BindsTo=tailscale-online@meerkat.target
 StartLimitIntervalSec=0
 
 [Path]
-# todo Make this an instantiable unit when only versions five and newer of Podman are supported.
-# PathChanged=%f
-PathChanged=/home/jordan/Pictures
+PathChanged=%f
 MakeDirectory=true
 TriggerLimitIntervalSec=0
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target

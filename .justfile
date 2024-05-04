@@ -12,6 +12,8 @@ install-immich-cli:
     distro=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
     if [ "$distro" = "debian" ]; then
         sudo apt-get --yes install podman
+        mkdir --parents ~/.config/systemd/user
+        ln --force --relative --symbolic immich-cli/user/*.service "{{ config_directory() }}/systemd/user/"
     elif [ "$distro" = "fedora" ]; then
         variant=$(awk -F= '$1=="VARIANT_ID" { print $2 ;}' /etc/os-release)
         if [ "$variant" = "container" ]; then
@@ -19,10 +21,10 @@ install-immich-cli:
         elif [ "$variant" = "iot" ] || [ "$variant" = "sericea" ]; then
             sudo rpm-ostree install podman
         fi
+        mkdir --parents ~/.config/containers/systemd
+        ln --force --relative --symbolic immich-cli/podman.network immich-cli/autoupload-immich@.container "{{ config_directory() }}/containers/systemd/"
     fi
     sudo loginctl enable-linger $USER
-    mkdir --parents ~/.config/containers/systemd
-    ln --force --relative --symbolic immich-cli/podman.network immich-cli/autoupload-immich.container ~/.config/containers/systemd/
     systemctl --user daemon-reload
 
 install-rclone:
