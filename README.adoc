@@ -341,31 +341,21 @@ Run this command under the same user that will be running the systemd unit.
 +
 [,sh]
 ----
- printf '%s' '<the API key>' | sudo podman secret create immich_api_key 
+ printf "%s" '<the API key>' | sudo podman secret create immich_api_key 
 ----
 
 User::
 +
 [,sh]
 ----
- printf '%s' '<the API key>' | podman secret create immich_api_key -
+ printf "%s" '<the API key>' | podman secret create immich_api_key 
 ----
 
 . Modify the `autoupload-immich@.container` file as needed.
 Make sure that the line for the appropriate installation method is uncommented and either comment or remove the line for the alternative method.
 Additionally, the `Requires` and `After` should be updated appropriately for the node where the Immich server resides.
 +
-System::
-+
-./etc/containers/systemd/autoupload-immich@.container
-[,systemd]
-----
-include::immich-cli/autoupload-immich@.container[]
-----
-
-User::
-+
-.~.config/containers/systemd/autoupload-immich@.container
+./etc/systemd/system/autoupload-immich@.container
 [,systemd]
 ----
 include::immich-cli/autoupload-immich@.container[]

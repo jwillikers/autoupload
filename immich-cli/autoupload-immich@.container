@@ -14,9 +14,7 @@ Network=podman.network
 Pull=newer
 Secret=immich_api_key,type=env,target=IMMICH_API_KEY
 UserNS=keep-id
-Volume=/home/jordan/Pictures:/import:z
-# todo Make this an instantiable unit when only versions five and newer of Podman are supported.
-# Volume=%f:/import:z
+Volume=%f:/import:z
 
 [Service]
 Restart=always
