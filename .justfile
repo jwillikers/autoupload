@@ -22,7 +22,7 @@ install-immich-cli:
     fi
     sudo loginctl enable-linger $USER
     mkdir --parents ~/.config/containers/systemd
-    ln --force --relative --symbolic immich-cli/podman.network immich-cli/immich-cli.container ~/.config/containers/systemd/
+    ln --force --relative --symbolic immich-cli/podman.network immich-cli/autoupload-immich@.container ~/.config/containers/systemd/
     systemctl --user daemon-reload
 
 install-rclone:
