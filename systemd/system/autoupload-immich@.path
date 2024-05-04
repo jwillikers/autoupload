@@ -8,6 +8,7 @@ StartLimitIntervalSec=0
 PathChanged=%f
 MakeDirectory=true
 TriggerLimitIntervalSec=0
+Unit=autoupload-immich.container
 
 [Install]
 WantedBy=multi-user.target
