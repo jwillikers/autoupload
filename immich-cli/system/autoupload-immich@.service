@@ -7,7 +7,6 @@ RequiresMountsFor=%t/containers
 
 [Service]
 CPUSchedulingPolicy=idle
-CPUSchedulingPriority=5
 Environment=PODMAN_SYSTEMD_UNIT=%n
 ExecStart=/usr/bin/podman run \
 	--cgroups=no-conmon \
