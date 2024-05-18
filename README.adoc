@@ -275,7 +275,6 @@ These instructions install the autoupload systemd units and their dependencies.
 The instructions here are for both Debian and Fedora Atomic.
 
 . Install {just} by following the instructions in the https://github.com/casey/just?tab=readme-ov-file#installation[installation section].
-
 . Follow the instructions to setup the {Tailscale-Online-Target} for the node where files will be uploaded.
 These instructions also document how to install Tailscale itself.
 After installing the necessary files, the following command enables the Tailscale Online Target for the `meerkat` node where my files will be uploaded.
@@ -339,6 +338,8 @@ This can be done with the `just login` command which will run the `immich login-
 The last argument should be the API key generated for the Pi Camera user in the <<Immich>> section.
 Run this command under the same user that will be running the systemd unit.
 +
+System::
++
 [,sh]
 ----
  printf '%s' '<the API key>' | sudo podman secret create immich_api_key 
@@ -365,7 +366,7 @@ include::immich-cli/autoupload-immich@.container[]
 
 User::
 +
-.~.config/containers/systemd/autoupload-immich@.container
+.~/.config/containers/systemd/autoupload-immich@.container
 [,systemd]
 ----
 include::immich-cli/autoupload-immich@.container[]
