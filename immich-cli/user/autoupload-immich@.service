@@ -27,9 +27,8 @@ ExecStart=/usr/bin/podman run \
         --delete \
         --recursive \
         /import
-ExecStartPre=/usr/bin/sleep 300
+ExecStartPre=/usr/bin/sleep 45
 IOSchedulingClass=idle
 IOSchedulingPriority=7
 Nice=19
-TimeoutStartSec=390
 Type=oneshot
