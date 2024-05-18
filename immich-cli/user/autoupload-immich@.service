@@ -3,6 +3,7 @@ Description=Immich CLI autoupload container
 Documentation=man:podman-generate-systemd(1)
 After=tailscale-online@meerkat.target
 BindsTo=tailscale-online@meerkat.target
+# ConditionCPUPressure=
 RequiresMountsFor=%t/containers
 
 [Service]
@@ -26,7 +27,9 @@ ExecStart=/usr/bin/podman run \
         --delete \
         --recursive \
         /import
+ExecStartPre=/usr/bin/sleep 300
 IOSchedulingClass=idle
 IOSchedulingPriority=7
 Nice=19
+TimeoutStartSec=390
 Type=oneshot
