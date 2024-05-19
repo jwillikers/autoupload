@@ -1,0 +1,12 @@
+[Unit]
+Description=Pull the latest Immich CLI container image regularly
+After=network-online.target
+BindsTo=network-online.target
+
+[Timer]
+OnCalendar=daily
+Persistent=yes
+AccuracySec=1hour
+
+[Install]
+WantedBy=timers.target

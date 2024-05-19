@@ -6,14 +6,14 @@ alias fmt := format
 format:
     just --fmt --unstable
 
-install-immich-cli:
+install-immich-cli: install
     #!/usr/bin/env bash
     set -euxo pipefail
     distro=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
     if [ "$distro" = "debian" ]; then
         sudo apt-get --yes install podman
-        mkdir --parents "{{ config_directory() }}/systemd/user"
-        ln --force --relative --symbolic immich-cli/user/*.service "{{ config_directory() }}/systemd/user/"
+        sudo cp immich-cli/system/*.service "/etc/systemd/system/"
+        sudo cp immich-cli/user/*.service "/etc/systemd/user/"
     elif [ "$distro" = "fedora" ]; then
         variant=$(awk -F= '$1=="VARIANT_ID" { print $2 ;}' /etc/os-release)
         if [ "$variant" = "container" ]; then
@@ -21,13 +21,14 @@ install-immich-cli:
         elif [ "$variant" = "iot" ] || [ "$variant" = "sericea" ]; then
             sudo rpm-ostree install podman
         fi
-        mkdir --parents "{{ config_directory() }}/containers/systemd"
-        ln --force --relative --symbolic immich-cli/podman.network immich-cli/autoupload-immich@.container "{{ config_directory() }}/containers/systemd/"
+        sudo cp immich-cli/system/*.service "/etc/systemd/system/"
+        sudo cp immich-cli/user/*.service "/etc/systemd/user/"
+        sudo mkdir --parents "/etc/containers/systemd"
+        sudo cp immich-cli/podman.network immich-cli/autoupload-immich@.container "/etc/containers/systemd/"
     fi
-    sudo loginctl enable-linger $USER
-    systemctl --user daemon-reload
+    sudo systemctl daemon-reload
 
-install-rclone:
+install-rclone: install
     #!/usr/bin/env bash
     set -euxo pipefail
     distro=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)

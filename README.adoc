@@ -352,6 +352,22 @@ User::
  printf '%s' '<the API key>' | podman secret create immich_api_key -
 ----
 
+. Enable the `update-immich-container.timer` systemd timer to automatically pull the latest Immich container image.
++
+System::
++
+[,sh]
+----
+sudo systemctl enable update-immich-container.timer
+----
+
+User::
++
+[,sh]
+----
+systemctl --user enable update-immich-container.timer
+----
+
 . Modify the `autoupload-immich@.container` file as needed.
 Make sure that the line for the appropriate installation method is uncommented and either comment or remove the line for the alternative method.
 Additionally, the `Requires` and `After` should be updated appropriately for the node where the Immich server resides.
@@ -387,6 +403,13 @@ User::
 [,sh]
 ----
 systemctl --user enable --now autoupload-immich@$(systemd-escape --path ~/Pictures).path
+----
+
+. When running under a user, make sure to enable linger for that user account.
++
+[,sh]
+----
+sudo loginctl enable-linger $USER
 ----
 
 === Rclone

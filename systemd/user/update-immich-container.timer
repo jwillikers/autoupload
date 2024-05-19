@@ -1,0 +1,10 @@
+[Unit]
+Description=Pull the latest Immich CLI container image regularly
+
+[Timer]
+OnCalendar=daily
+Persistent=yes
+AccuracySec=1hour
+
+[Install]
+WantedBy=timers.target

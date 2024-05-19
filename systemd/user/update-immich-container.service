@@ -1,0 +1,14 @@
+[Unit]
+Description=Pull the latest Immich CLI container image
+Documentation=man:podman-generate-systemd(1)
+After=network-online.target
+BindsTo=network-online.target
+RequiresMountsFor=%t/containers
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+ExecStart=/usr/bin/podman pull ghcr.io/immich-app/immich-cli:latest
+IOSchedulingClass=idle
+IOSchedulingPriority=7
+Nice=19
+Type=oneshot
