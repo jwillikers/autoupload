@@ -388,21 +388,44 @@ User::
 include::immich-cli/autoupload-immich@.container[]
 ----
 
-. Enable and start the instantiable `autoupload-immich@.path` systemd unit passing the properly escaped path of the directory to monitor.
+. Enable and start the systemd units for the desired approach.
+There are two approaches to initiating uploads: systemd timers and systemd path units.
+One or both of these approaches can be used to trigger the systemd unit.
++
+systemd.path:: Enable and start the instantiable `autoupload-immich@.path` systemd unit passing the properly escaped path of the directory to monitor.
 Use the `systemd-escape --path` command to escape the directory's path.
 +
-System::
+System:::
 +
 [,sh]
 ----
 sudo systemctl enable --now autoupload-immich@$(systemd-escape --path ~/Pictures).path
 ----
 
-User::
+User:::
 +
 [,sh]
 ----
 systemctl --user enable --now autoupload-immich@$(systemd-escape --path ~/Pictures).path
+----
+
+systemd.timer:: Enable and start the instantiable `autoupload-immich@.timer` systemd unit passing the properly escaped path of the directory to monitor.
+The timer unit files can be modified as desired.
+By default, they trigger once daily.
+Use the `systemd-escape --path` command to escape the directory's path.
++
+System:::
++
+[,sh]
+----
+sudo systemctl enable --now autoupload-immich@$(systemd-escape --path ~/Pictures).timer
+----
+
+User:::
++
+[,sh]
+----
+systemctl --user enable --now autoupload-immich@$(systemd-escape --path ~/Pictures).timer
 ----
 
 . When running under a user, make sure to enable linger for that user account.
