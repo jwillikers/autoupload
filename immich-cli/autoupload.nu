@@ -16,12 +16,13 @@ def latest_file_modified_time [
     ls --all --mime-type $"($directory)" | where type starts-with $file_type | sort-by --reverse modified | first | get modified
 }
 
-# Upload images to Immich.
+# Upload an image to Immich.
 def upload [
-    directory # The directory to watch
+    file: path # The image to upload
     --immich-cli-tag = "latest" # The tag of the Immich CLI container image
     --immich-instance-url = "https://immich.jwillikers.io/api" # The URL of the Immich instance
 ] {
+    let filename = ($file | path basename)
     (^/usr/bin/podman run 
         --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
         --name immich-cli
@@ -33,17 +34,16 @@ def upload [
         --secret "immich_api_key,type=env,target=IMMICH_API_KEY"
         --user ((^id -u) + ":" + (^id -g))
         --userns keep-id
-        --volume $"($directory):/import:z"
+        --volume $"($file):/($filename):Z"
         $"ghcr.io/immich-app/immich-cli:($immich_cli_tag)"
             upload
             --delete
-            --recursive
-            /import
+            $"/($filename)"
     )
     if $env.LAST_EXIT_CODE == 0 {
-        log info $"Images in ($directory) uploaded"
+        log info $"Image ($file) uploaded"
     } else {
-        log error $"Failed to upload images in ($directory). Podman command failed with exit code ($env.LAST_EXIT_CODE)"
+        log error $"Failed to upload image ($file). Podman command failed with exit code ($env.LAST_EXIT_CODE)"
     }
 }
 
@@ -73,7 +73,7 @@ def main [
     watch --glob $file_glob $directory { |op, path, new_path| 
         if $op == "Create" {
             log info $"File ($path) created"
-            mut last_modified = (date now)
+            mut last_modified = (latest_file_modified_time $directory $file_type)
             while (date now) - $last_modified <= $wait_time {
                 if $systemd_notify {
                     ^/usr/bin/systemd-notify $"--status=Waiting to upload images until ($wait_time) after the most recent file modification: ($last_modified)"
@@ -82,9 +82,9 @@ def main [
                 $last_modified = (latest_file_modified_time $directory $file_type)
             }
             if $systemd_notify {
-                ^/usr/bin/systemd-notify $"--status=Uploading files in ($directory) to Immich"
+                ^/usr/bin/systemd-notify $"--status=Uploading ($path) to Immich"
             }
-            upload $directory --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url
+            upload $path --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url
             if $systemd_notify {
                 ^/usr/bin/systemd-notify $"--status=Watching for ($file_type) files in ($directory)"
             }
