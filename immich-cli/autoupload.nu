@@ -73,6 +73,9 @@ def main [
     watch --glob $file_glob $directory { |op, path, new_path| 
         if $op == "Create" {
             log info $"File ($path) created"
+            if $systemd_notify {
+                ^/usr/bin/systemd-notify $"--status=Waiting to upload images until ($wait_time) after the most recent file modification"
+            }
             sleep $wait_time
             let last_modified = latest_file_modified_time $directory $file_type
             while (date now) - $last_modified < $wait_time {
