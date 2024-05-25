@@ -32,7 +32,7 @@ def upload [
         --network podman
         --pull newer
         --secret "immich_api_key,type=env,target=IMMICH_API_KEY"
-        --user (^id -u) + ":" + (^id -g)
+        --user ((^id -u) + ":" + (^id -g))
         --userns keep-id
         --volume $"($directory):/import:z"
         $"ghcr.io/immich-app/immich-cli:($immich_cli_tag)"
