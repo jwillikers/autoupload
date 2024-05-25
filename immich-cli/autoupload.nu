@@ -23,6 +23,7 @@ def upload [
     --immich-instance-url = "https://immich.jwillikers.io/api" # The URL of the Immich instance
 ] {
     do {(^/usr/bin/podman run 
+        --interactive
         --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
         --name immich-cli
         --network podman
