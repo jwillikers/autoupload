@@ -59,11 +59,11 @@ def upload [
             --secret "immich_api_key,type=env,target=IMMICH_API_KEY"
             --user ((^id -u) + ":" + (^id -g))
             --userns keep-id
-            --volume $"($target):/($filename):Z"
+            --volume $"($target):/import/($filename):Z"
             $"ghcr.io/immich-app/immich-cli:($immich_cli_tag)"
                 upload
                 --delete
-                $"/($filename)"
+                $"/import/($filename)"
         )
         if $env.LAST_EXIT_CODE == 0 {
             log info $"Image ($target) uploaded"
