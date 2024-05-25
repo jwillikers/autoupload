@@ -76,7 +76,7 @@ def main [
             let last_modified = (date now)
             while (date now) - $last_modified < $wait_time {
                 if $systemd_notify {
-                    ^/usr/bin/systemd-notify $"--status=Waiting to upload images until ($wait_time) after the most recent file modification, ($last_modified)"
+                    ^/usr/bin/systemd-notify $"--status=Waiting to upload images until ($wait_time) after the most recent file modification: ($last_modified)"
                 }
                 sleep $wait_time
                 last_modified = (latest_file_modified_time $directory $file_type)
