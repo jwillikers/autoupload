@@ -13,6 +13,7 @@ def latest_file_modified_time [
 def main [
     directory # The directory to watch
     --file-type = "image" # The mime type of the files to watch
+    --file-glob = "**/*.jpg" # A glob pattern for the file extensions to watch
     --immich-instance-url = "https://immich.jwillikers.io/api" # The URL of the Immich instance
     --immich-cli-tag = "latest" # The tag of the Immich CLI container image
     --systemd-notify # Enable systemd-notify support for running as a systemd service
@@ -21,7 +22,7 @@ def main [
     if $systemd_notify {
         ^/usr/bin/systemd-notify --ready $"--status='Watching for ($file_type) files in ($directory)'"
     }
-    watch --glob $file_type $directory { |op, path, new_path| 
+    watch --glob $file_glob $directory { |op, path, new_path| 
         if $op == "Create" {
             log info $"File ($path) created"
             sleep $wait_time
