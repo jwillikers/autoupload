@@ -22,7 +22,7 @@ def upload [
     --immich-cli-tag = "latest" # The tag of the Immich CLI container image
     --immich-instance-url = "https://immich.jwillikers.io/api" # The URL of the Immich instance
 ] {
-    do {(^/usr/bin/podman run 
+    (^/usr/bin/podman run 
         --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
         --name immich-cli
         --network podman
@@ -39,7 +39,7 @@ def upload [
             --delete
             --recursive
             /import
-    )} | complete
+    )
     if $env.LAST_EXIT_CODE == 0 {
         log info $"Images in ($directory) uploaded"
     } else {
