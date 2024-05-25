@@ -74,7 +74,7 @@ def main [
         if $op == "Create" {
             log info $"File ($path) created"
             mut last_modified = (date now)
-            while (date now) - $last_modified < $wait_time {
+            while (date now) - $last_modified <= $wait_time {
                 if $systemd_notify {
                     ^/usr/bin/systemd-notify $"--status=Waiting to upload images until ($wait_time) after the most recent file modification: ($last_modified)"
                 }
