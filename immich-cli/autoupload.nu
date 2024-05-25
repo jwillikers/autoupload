@@ -47,6 +47,7 @@ def upload [
             log error $"Failed to upload images in ($target). Podman command failed with exit code ($env.LAST_EXIT_CODE)"
         }
     } else {
+        let directory = ($target | path dirname)
         let filename = ($target | path basename)
         (^/usr/bin/podman run 
             --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
@@ -59,7 +60,7 @@ def upload [
             --secret "immich_api_key,type=env,target=IMMICH_API_KEY"
             --user ((^id -u) + ":" + (^id -g))
             --userns keep-id
-            --volume $"($target):/import/($filename):Z"
+            --volume $"($directory):/import:z"
             $"ghcr.io/immich-app/immich-cli:($immich_cli_tag)"
                 upload
                 --delete
