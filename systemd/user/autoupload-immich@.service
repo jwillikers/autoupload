@@ -1,0 +1,16 @@
+[Unit]
+Description=Immich CLI autoupload container
+Documentation=man:podman-generate-systemd(1)
+After=tailscale-online@meerkat.target
+BindsTo=tailscale-online@meerkat.target
+# ConditionCPUPressure=
+RequiresMountsFor=%t/containers
+
+[Service]
+CPUSchedulingPolicy=idle
+ExecStart=/usr/local/bin/autoupload.nu %f
+IOSchedulingClass=idle
+IOSchedulingPriority=7
+Nice=19
+NotifyAccess=main
+Type=notify
