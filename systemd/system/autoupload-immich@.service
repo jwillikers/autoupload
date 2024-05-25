@@ -13,3 +13,6 @@ IOSchedulingPriority=7
 Nice=19
 NotifyAccess=main
 Type=notify
+
+[Install]
+WantedBy=multi-user.target
