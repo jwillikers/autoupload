@@ -24,12 +24,14 @@ def upload [
 ] {
     do {(^/usr/bin/podman run 
         --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
+        --interactive
         --name immich-cli
         --network podman
         --pull newer
         --replace
         --rm
         --secret "immich_api_key,type=env,target=IMMICH_API_KEY"
+        --tty
         --user ((^id -u) + ":" + (^id -g))
         --userns keep-id
         --volume $"($directory):/import:z"
