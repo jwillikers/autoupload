@@ -8,7 +8,7 @@ RequiresMountsFor=%t/containers
 
 [Service]
 CPUSchedulingPolicy=idle
-ExecStart=/usr/local/bin/autoupload.nu %f
+ExecStart=/usr/local/bin/autoupload.nu %f --systemd-notify
 IOSchedulingClass=idle
 IOSchedulingPriority=7
 Nice=19

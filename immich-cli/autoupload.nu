@@ -15,9 +15,12 @@ def main [
     --file-type = "image" # The mime type of the files to watch
     --immich-instance-url = "https://immich.jwillikers.io/api" # The URL of the Immich instance
     --immich-cli-tag = "latest" # The tag of the Immich CLI container image
+    --systemd-notify # Enable systemd-notify support for running as a systemd service
     --wait-time = 3min  # The amount of time to wait after the last file has appeared before uploading
 ] {
-    ^/usr/bin/systemd-notify --ready
+    if $systemd_notify {
+        ^/usr/bin/systemd-notify --ready $"--status='Watching for ($file_type) files in ($directory)'"
+    }
     watch --glob $file_type $directory { |op, path, new_path| 
         if $op == "Create" {
             log info $"File ($path) created"
@@ -26,6 +29,9 @@ def main [
             while (date now) - $last_modified < $wait_time {
                 sleep $wait_time
                 last_modified = latest_file_modified_time $directory $file_type
+            }
+            if $systemd_notify {
+                ^/usr/bin/systemd-notify $"--status='Uploading files in ($directory) to Immich'"
             }
             (^/usr/bin/podman run 
                 --cgroups=no-conmon 
@@ -50,6 +56,9 @@ def main [
                 log info $"Images in ($directory) uploaded"
             } else {
                 log error $"Failed to upload images in ($directory). Podman command failed with exit code ($env.LAST_EXIT_CODE)"
+            }
+            if $systemd_notify {
+                ^/usr/bin/systemd-notify $"--status='Watching for ($file_type) files in ($directory)'"
             }
         }
     }
