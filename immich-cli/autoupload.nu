@@ -63,12 +63,12 @@ def main [
     }
     if (directory_has_files $directory $file_type) {
         if $systemd_notify {
-            ^/usr/bin/systemd-notify $"--status='Uploading existing files in ($directory) to Immich'"
+            ^/usr/bin/systemd-notify $"--status=Uploading existing files in ($directory) to Immich"
         }
         upload $directory --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url
     }
     if $systemd_notify {
-        ^/usr/bin/systemd-notify $"--status='Watching for ($file_type) files in ($directory)'"
+        ^/usr/bin/systemd-notify $"--status=Watching for ($file_type) files in ($directory)"
     }
     watch --glob $file_glob $directory { |op, path, new_path| 
         if $op == "Create" {
@@ -80,11 +80,11 @@ def main [
                 last_modified = latest_file_modified_time $directory $file_type
             }
             if $systemd_notify {
-                ^/usr/bin/systemd-notify $"--status='Uploading files in ($directory) to Immich'"
+                ^/usr/bin/systemd-notify $"--status=Uploading files in ($directory) to Immich"
             }
             upload $directory --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url
             if $systemd_notify {
-                ^/usr/bin/systemd-notify $"--status='Watching for ($file_type) files in ($directory)'"
+                ^/usr/bin/systemd-notify $"--status=Watching for ($file_type) files in ($directory)"
             }
         }
     }
