@@ -6,7 +6,7 @@ def latest_file_modified_time [
     directory: path
     file_type: string = image  # Only check files which have this mime type
 ] {
-    ls --all --mime-type $"($directory)" | where "type" =~ $"^($file_type)" | sort-by --reverse modified | first | get modified
+    ls --all --mime-type $"($directory)" | where type starts-with $file_type | sort-by --reverse modified | first | get modified
 }
 
 # Watch for new pictures in the given directory and upload them to Immich.

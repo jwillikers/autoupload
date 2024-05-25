@@ -313,15 +313,6 @@ cd autoupload
 
 . Install {Immich-CLI} by running `just install-immich-cli`.
 +
-System::
-+
-[,sh]
-----
-sudo just install-immich-cli
-----
-
-User::
-+
 [,sh]
 ----
 just install-immich-cli
