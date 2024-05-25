@@ -26,7 +26,7 @@ def upload [
         --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
         --name immich-cli
         --network podman
-        --notify ignore
+        --sdnotify ignore
         --pull newer
         --replace
         --rm
