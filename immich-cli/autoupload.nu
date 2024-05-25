@@ -63,6 +63,7 @@ def main [
         if $systemd_notify {
             ^/usr/bin/systemd-notify $"--status=Uploading existing files in ($directory) to Immich"
         }
+        log info $"Uploading existing files in ($directory) to Immich"
         upload $directory --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url
     }
     if $systemd_notify {
