@@ -6,7 +6,7 @@ alias fmt := format
 format:
     just --fmt --unstable
 
-install-nushell version="0.93.0":
+install-nushell version="0.94.1":
     #!/usr/bin/env bash
     set -euxo pipefail
     distro=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
