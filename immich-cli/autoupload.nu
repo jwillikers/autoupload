@@ -79,7 +79,6 @@ def upload [
 # Watch for new pictures in the given directory and upload them to Immich.
 def main [
     directory: directory # The directory to watch
-    --file-glob: glob = "**/*.{jpg,mp4}" # A glob pattern for the file extensions to watch
     --mime-types: list = ["image/jpeg" "video/mp4"] # The mime types of the files to watch
     --immich-cli-tag: string = "latest" # The tag of the Immich CLI container image
     --immich-instance-url: string = "https://immich.jwillikers.io/api" # The URL of the Immich instance
@@ -99,23 +98,25 @@ def main [
     if $systemd_notify {
         ^/usr/bin/systemd-notify $"--status=Watching for ($mime_types) files in ($directory)"
     }
-    watch --glob $file_glob $directory { |op, path, new_path| 
+    watch $directory { |op, path, new_path| 
         if $op == "Create" {
-            log info $"File ($path) created"
-            mut last_modified = (latest_file_modified_time $directory $mime_types)
-            while (date now) - $last_modified <= $wait_time {
-                if $systemd_notify {
-                    ^/usr/bin/systemd-notify $"--status=Waiting to upload image until ($wait_time) after the most recent file modification: ($last_modified)"
+            if ((ls --mime-type $path | get type | first) in $mime_types) {
+                log info $"File ($path) created"
+                mut last_modified = (latest_file_modified_time $directory $mime_types)
+                while (date now) - $last_modified <= $wait_time {
+                    if $systemd_notify {
+                        ^/usr/bin/systemd-notify $"--status=Waiting to upload image until ($wait_time) after the most recent file modification: ($last_modified)"
+                    }
+                    sleep $wait_time
+                    $last_modified = (latest_file_modified_time $directory $mime_types)
                 }
-                sleep $wait_time
-                $last_modified = (latest_file_modified_time $directory $mime_types)
-            }
-            if $systemd_notify {
-                ^/usr/bin/systemd-notify $"--status=Uploading ($path) to Immich"
-            }
-            upload $path --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url
-            if $systemd_notify {
-                ^/usr/bin/systemd-notify $"--status=Watching for ($mime_types) files in ($directory)"
+                if $systemd_notify {
+                    ^/usr/bin/systemd-notify $"--status=Uploading ($path) to Immich"
+                }
+                upload $path --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url
+                if $systemd_notify {
+                    ^/usr/bin/systemd-notify $"--status=Watching for ($mime_types) files in ($directory)"
+                }
             }
         }
     }
