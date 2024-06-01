@@ -79,7 +79,7 @@ def upload [
 # Watch for new pictures in the given directory and upload them to Immich.
 def main [
     directory: directory # The directory to watch
-    --file-glob: glob = "**/*.jpg" # A glob pattern for the file extensions to watch
+    --file-glob: glob = "**/*.{jpg,mp4}" # A glob pattern for the file extensions to watch
     --mime-types: list = ["image/jpeg" "video/mp4"] # The mime types of the files to watch
     --immich-cli-tag: string = "latest" # The tag of the Immich CLI container image
     --immich-instance-url: string = "https://immich.jwillikers.io/api" # The URL of the Immich instance
