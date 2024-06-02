@@ -92,7 +92,19 @@ def main [
         if $systemd_notify {
             ^/usr/bin/systemd-notify $"--status=Uploading existing files in ($directory) to Immich"
         }
+        log info $"Found existing files in ($directory)"
+        mut last_modified = (latest_file_modified_time $directory $mime_types)
+        while (date now) - $last_modified <= $wait_time {
+            if $systemd_notify {
+                ^/usr/bin/systemd-notify $"--status=Waiting to upload images until ($wait_time) after the most recent file modification: ($last_modified)"
+            }
+            sleep $wait_time
+            $last_modified = (latest_file_modified_time $directory $mime_types)
+        }
         log info $"Uploading existing files in ($directory) to Immich"
+        if $systemd_notify {
+            ^/usr/bin/systemd-notify $"--status=Uploading files in ($directory) to Immich"
+        }
         upload $directory --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url
     }
     if $systemd_notify {
