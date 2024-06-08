@@ -108,7 +108,7 @@ def main [
         ^/usr/bin/systemd-notify $"--status=Watching for ($mime_types) files in ($directory)"
     }
     # Avoid exiting.
-    while True {
+    while true {
         watch $directory { |op, path, new_path| 
             if $op == "Create" {
                 if ((ls --mime-type $path | get type | first) in $mime_types) {
