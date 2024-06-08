@@ -28,7 +28,6 @@ def upload [
             --name immich-cli
             --network podman
             --sdnotify ignore
-            --pull newer
             --replace
             --rm
             --secret "immich_api_key,type=env,target=IMMICH_API_KEY"
