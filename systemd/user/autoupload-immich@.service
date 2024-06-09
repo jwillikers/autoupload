@@ -7,12 +7,12 @@ BindsTo=tailscale-online@meerkat.target
 RequiresMountsFor=%t/containers
 
 [Service]
-CPUSchedulingPolicy=idle
+#CPUSchedulingPolicy=idle
 Environment=NU_LOG_LEVEL=INFO
 ExecStart=/usr/local/bin/autoupload.nu %f --systemd-notify
-IOSchedulingClass=idle
-IOSchedulingPriority=7
-Nice=19
+#IOSchedulingClass=idle
+#IOSchedulingPriority=7
+#Nice=19
 NotifyAccess=all
 Restart=always
 Type=notify
