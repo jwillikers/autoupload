@@ -61,6 +61,6 @@ install-rclone: install
     fi
 
 install:
-    sudo cp systemd/user/* /etc/systemd/user/
-    sudo cp systemd/system/* /etc/systemd/system/
+    sudo cp --recursive systemd/system/* /etc/systemd/system/
+    sudo cp  systemd/user/* /etc/systemd/user/
     sudo systemctl daemon-reload

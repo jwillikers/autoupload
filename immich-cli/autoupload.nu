@@ -49,6 +49,7 @@ def upload [
         let directory = ($target | path dirname)
         let filename = ($target | path basename)
         (^/usr/bin/podman run 
+            --cpus 1
             --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
             --name immich-cli
             --network podman
