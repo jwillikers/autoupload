@@ -17,60 +17,63 @@ def latest_file_modified_time [
 }
 
 # Upload an image or images in a directory to Immich.
-# todo Handle upload failures.
+#
+# Returns null on success, otherwise an error message.
 def upload [
     target: path # The image to upload
     --immich-cli-tag = "latest" # The tag of the Immich CLI container image
     --immich-instance-url = "https://immich.jwillikers.io/api" # The URL of the Immich instance
 ] {
     if ($target | path type) == dir {
-        (^/usr/bin/podman run 
-            --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
-            --name immich-cli
-            --network podman
-            --sdnotify ignore
-            --replace
-            --rm
-            --secret "immich_api_key,type=env,target=IMMICH_API_KEY"
-            --user ((^id -u) + ":" + (^id -g))
-            --userns keep-id
-            --volume $"($target):/import:Z"
-            $"ghcr.io/immich-app/immich-cli:($immich_cli_tag)"
-                upload
-                --delete
-                --recursive
-                /import
-        )
-        if $env.LAST_EXIT_CODE == 0 {
-            log info $"Images in ($target) uploaded"
+        let result = (do {(
+            ^/usr/bin/podman run 
+                --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
+                --name immich-cli
+                --network podman
+                --sdnotify ignore
+                --replace
+                --rm
+                --secret "immich_api_key,type=env,target=IMMICH_API_KEY"
+                --user ((^id -u) + ":" + (^id -g))
+                --userns keep-id
+                --volume $"($target):/import:Z"
+                $"ghcr.io/immich-app/immich-cli:($immich_cli_tag)"
+                    upload
+                    --delete
+                    --recursive
+                    /import
+        )} | complete)
+        if $result.exit_code == 0 {
+            null
         } else {
-            log error $"Failed to upload images in ($target). Podman command failed with exit code ($env.LAST_EXIT_CODE)"
+            $result.stderr
         }
     } else {
         let directory = ($target | path dirname)
         let filename = ($target | path basename)
-        (^/usr/bin/podman run 
-            --cpus 1
-            --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
-            --name immich-cli
-            --network podman
-            --sdnotify ignore
-            --pull newer
-            --replace
-            --rm
-            --secret "immich_api_key,type=env,target=IMMICH_API_KEY"
-            --user ((^id -u) + ":" + (^id -g))
-            --userns keep-id
-            --volume $"($directory):/import:z"
-            $"ghcr.io/immich-app/immich-cli:($immich_cli_tag)"
-                upload
-                --delete
-                $"/import/($filename)"
-        )
-        if $env.LAST_EXIT_CODE == 0 {
-            log info $"Image ($target) uploaded"
+        let result = (do {(
+            ^/usr/bin/podman run 
+                --cpus 1
+                --env $"IMMICH_INSTANCE_URL=($immich_instance_url)"
+                --name immich-cli
+                --network podman
+                --sdnotify ignore
+                --pull newer
+                --replace
+                --rm
+                --secret "immich_api_key,type=env,target=IMMICH_API_KEY"
+                --user ((^id -u) + ":" + (^id -g))
+                --userns keep-id
+                --volume $"($directory):/import:z"
+                $"ghcr.io/immich-app/immich-cli:($immich_cli_tag)"
+                    upload
+                    --delete
+                    $"/import/($filename)"
+        )} | complete)
+        if $result.exit_code == 0 {
+            null
         } else {
-            log error $"Failed to upload image ($target). Podman command failed with exit code ($env.LAST_EXIT_CODE)"
+            $result.stderr
         }
     }
 }
@@ -104,7 +107,18 @@ def main [
         if $systemd_notify {
             ^/usr/bin/systemd-notify $"--status=Uploading files in ($directory) to Immich"
         }
-        upload $directory --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url
+        mut error = ""
+        while $error != null {
+            let error = (upload $directory --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url)
+            if $error != null {
+                log error (
+                    $"Failed to upload the assets in ($directory) to Immich. " +
+                    $"Podman failed with the error: '($error)'"
+                )
+                log info $"Will reattempt to upload the assets in ($directory) to Immich in ($wait_time)."
+                sleep $wait_time
+            }
+        }
     }
     if $systemd_notify {
         ^/usr/bin/systemd-notify $"--status=Watching for ($mime_types) files in ($directory)"
@@ -126,7 +140,18 @@ def main [
                     if $systemd_notify {
                         ^/usr/bin/systemd-notify $"--status=Uploading ($path) to Immich"
                     }
-                    upload $path --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url
+                    mut error = ""
+                    while $error != null {
+                        let error = (upload $path --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url)
+                        if $error != null {
+                            log error (
+                                $"Failed to upload the asset ($path) to Immich. " +
+                                $"Podman failed with the error: '($error)'"
+                            )
+                            log info $"Will reattempt to upload the asset ($path) to Immich in ($wait_time)."
+                            sleep $wait_time
+                        }
+                    }
                     if $systemd_notify {
                         ^/usr/bin/systemd-notify $"--status=Watching for ($mime_types) files in ($directory)"
                     }
