@@ -18,4 +18,5 @@ Restart=always
 Type=notify
 
 [Install]
+UpheldBy=tailscale-online@meerkat.target
 WantedBy=default.target

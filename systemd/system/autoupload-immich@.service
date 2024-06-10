@@ -3,6 +3,7 @@ Description=Immich CLI autoupload container
 Documentation=man:podman-generate-systemd(1)
 After=tailscale-online@meerkat.target
 BindsTo=tailscale-online@meerkat.target
+# ConditionCPUPressure=
 RequiresMountsFor=%t/containers
 
 [Service]
@@ -17,4 +18,5 @@ Restart=always
 Type=notify
 
 [Install]
+UpheldBy=tailscale-online@meerkat.target
 WantedBy=multi-user.target

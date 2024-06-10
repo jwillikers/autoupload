@@ -10,4 +10,5 @@ MakeDirectory=true
 TriggerLimitIntervalSec=0
 
 [Install]
+UpheldBy=tailscale-online@meerkat.target
 WantedBy=multi-user.target

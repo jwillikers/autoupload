@@ -17,6 +17,7 @@ def latest_file_modified_time [
 }
 
 # Upload an image or images in a directory to Immich.
+# todo Handle upload failures.
 def upload [
     target: path # The image to upload
     --immich-cli-tag = "latest" # The tag of the Immich CLI container image
