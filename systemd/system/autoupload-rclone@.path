@@ -11,4 +11,4 @@ TriggerLimitIntervalSec=0
 
 [Install]
 UpheldBy=tailscale-online@meerkat.target
-WantedBy=multi-user.target
+WantedBy=multi-user.target tailscale-online@meerkat.target
