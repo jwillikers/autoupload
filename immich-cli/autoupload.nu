@@ -109,7 +109,7 @@ def main [
         }
         mut error = ""
         while $error != null {
-            let error = (upload $directory --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url)
+            $error = (upload $directory --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url)
             if $error != null {
                 log error (
                     $"Failed to upload the assets in ($directory) to Immich. " +
@@ -142,7 +142,7 @@ def main [
                     }
                     mut error = ""
                     while $error != null {
-                        let error = (upload $path --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url)
+                        $error = (upload $path --immich-cli-tag $immich_cli_tag --immich-instance-url $immich_instance_url)
                         if $error != null {
                             log error (
                                 $"Failed to upload the asset ($path) to Immich. " +
