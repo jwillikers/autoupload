@@ -19,7 +19,7 @@ endif::[]
 :Rclone: https://rclone.org/[Rclone]
 :systemd: https://systemd.io/[systemd]
 :Tailscale: https://tailscale.com/[Tailscale]
-:Tailscale-Online-Target: https://github.com/jwillikers/tailscale-online-target[Tailscale Online Target]
+:Tailscale-Online-Target: https://codeberg.org/jwillikers/tailscale-online-target[Tailscale Online Target]
 
 A {systemd} unit to autoupload a directory's contents to S3-compatible object storage with {Rclone} or to {Immich} with the {Immich-CLI}.
 This is handy for automatically uploading files like photos or sound clips.
@@ -35,7 +35,7 @@ The files are then removed from local storage.
 The files are uploaded somewhere, which requires configuration.
 Files can be uploaded to S3-compatible object storage or to {Immich}.
 For S3-compatible object storage, this documentation specifically refers to {MinIO}.
-Both my MinIO and Immich setups are documented in my https://github.com/jwillikers/home-lab-helm[Home Lab Helm] repository.
+Both my MinIO and Immich setups are documented in my https://codeberg.org/jwillikers/home-lab-helm[Home Lab Helm] repository.
 I use {Tailscale} to access these services.
 Using MinIO is more secure as an API token can be scoped with access that is limited to uploading files.
 For Immich, it is possible to use the local API token to delete uploaded files or to do even worse if the API token belongs to an admin user.
@@ -299,7 +299,7 @@ systemctl --user enable --now tailscale-dispatcher@meerkat.timer
 +
 [,sh]
 ----
-git clone https://github.com/jwillikers/autoupload.git
+git clone https://codeberg.org/jwillikers/autoupload.git
 ----
 
 . Change to the project's root directory.
@@ -327,7 +327,7 @@ System::
 +
 [,sh]
 ----
- printf '%s' '<the API key>' | sudo podman secret create immich_api_key 
+ printf '%s' '<the API key>' | sudo podman secret create immich_api_key
 ----
 
 User::
